@@ -1,5 +1,6 @@
 using Closavy.Server.Data;
 using Closavy.Server.Dtos.Character;
+using Closavy.Server.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Closavy.Server.Services.Character;
@@ -8,11 +9,11 @@ public class CharacterService(
     GameDbContext dbContext
 ) : ICharacterService
 {
-    public async Task<int> CreateAsync(CharacterCreateDto request, CancellationToken ct)
+    public async Task<int> CreateCharacterAsync(CharacterCreateDto request, CancellationToken ct)
     {
         if (await IsCharacterNameAlreadyInUse(request.Name))
             throw new Exception("Character name is already in use!");
-        Models.Character character = new()
+        CharacterEntity character = new()
         {
             Name = request.Name,
             Level = 0,
@@ -26,9 +27,23 @@ public class CharacterService(
         return character.Id;
     }
 
+    public async Task<CharacterResponseDto> GetCharacterAsync(int characterId, CancellationToken ct)
+    {
+        CharacterEntity? character = await dbContext.Characters.FindAsync([characterId], cancellationToken: ct) ?? throw new Exception("Character not found");
+        
+        return new CharacterResponseDto
+        {
+            Id = character.Id,
+            Name = character.Name,
+            Level = character.Level,
+            Experience = character.Experience,
+            CreatedAt = character.CreatedAt,
+        };
+    }
+
     private async Task<bool> IsCharacterNameAlreadyInUse(string name)
     {
-        Models.Character? character = await dbContext.Characters.SingleOrDefaultAsync(c => c.Name == name);
+        CharacterEntity? character = await dbContext.Characters.SingleOrDefaultAsync(c => c.Name == name);
         return character != null;
     }
 }

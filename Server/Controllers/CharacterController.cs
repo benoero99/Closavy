@@ -1,5 +1,7 @@
 using Closavy.Server.Dtos.Character;
-using Closavy.Server.Services;
+using Closavy.Server.Models;
+using Closavy.Server.Services.Character;
+using FluentValidation;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +11,12 @@ namespace Closavy.Server.Controllers;
 [Route("[controller]")]
 public class CharacterController(
     ILogger<CharacterController> logger,
-    ICharacterService characterService
+    ICharacterService characterService,
+    IValidator<CharacterCreateDto> validator
 ) : Controller
 {
     private readonly ILogger<CharacterController> _logger = logger;
+    private readonly IValidator<CharacterCreateDto> _validator = validator;
 
     [HttpPost]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
@@ -20,8 +24,26 @@ public class CharacterController(
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> PostCharacter(CharacterCreateDto createDto, CancellationToken ct = default)
     {
-        var createdId = await characterService.CreateAsync(createDto, ct);
+        var validationResult = await _validator.ValidateAsync(createDto, ct);
 
-        return Created(new Uri(Request.GetEncodedUrl()+ "/" + createdId), createdId);
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.ToDictionary());
+        }
+
+        int createdId = await characterService.CreateCharacterAsync(createDto, ct);
+
+        return Created(new Uri(Request.GetEncodedUrl() + "/" + createdId), createdId);
+    }
+
+    [HttpGet]
+    [ProducesResponseType(typeof(CharacterResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetCharacter(int characterId, CancellationToken ct = default)
+    {
+        CharacterResponseDto character = await characterService.GetCharacterAsync(characterId, ct);
+
+        return Ok(character);
     }
 }
