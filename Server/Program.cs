@@ -2,6 +2,8 @@ using Closavy.Server.Data;
 using Closavy.Server.HealthCheck;
 using Closavy.Server.Services;
 using Closavy.Server.Services.Character;
+using Closavy.Server.Validations.Character;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +22,7 @@ builder.Services.AddDbContext<GameDbContext>(options =>
         builder.Configuration.GetConnectionString("GameDatabase")));
 
 builder.Services.AddScoped<ICharacterService, CharacterService>();
+builder.Services.AddValidatorsFromAssemblyContaining<CharacterCreateDtoValidator>();
 
 var app = builder.Build();
 
