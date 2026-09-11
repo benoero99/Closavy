@@ -1,4 +1,5 @@
 using Closavy.Server.Dtos.Character;
+using Closavy.Server.Services.Account;
 using Closavy.Server.Services.Character;
 using FluentValidation;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -14,16 +15,13 @@ public class CharacterController(
     IValidator<CharacterCreateDto> validator
 ) : Controller
 {
-    private readonly ILogger<CharacterController> _logger = logger;
-    private readonly IValidator<CharacterCreateDto> _validator = validator;
-
     [HttpPost]
     [ProducesResponseType(typeof(CharacterResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<CharacterResponseDto>> PostCharacter(CharacterCreateDto createDto, CancellationToken ct = default)
     {
-        var validationResult = await _validator.ValidateAsync(createDto, ct);
+        var validationResult = await validator.ValidateAsync(createDto, ct);
 
         if (!validationResult.IsValid)
         {

@@ -1,20 +1,26 @@
 using Closavy.Server.Data;
 using Closavy.Server.Dtos.Character;
 using Closavy.Server.Models;
+using Closavy.Server.Services.Account;
 using Microsoft.EntityFrameworkCore;
 
 namespace Closavy.Server.Services.Character;
 
 public class CharacterService(
-    GameDbContext dbContext
+    GameDbContext dbContext,
+    ICurrentAccountService currentAccountService
 ) : ICharacterService
 {
     public async Task<CharacterResponseDto> CreateCharacterAsync(CharacterCreateDto request, CancellationToken ct)
     {
         if (await IsCharacterNameAlreadyInUse(request.Name))
             throw new Exception("Character name is already in use!");
+
+        var accountId = currentAccountService.AccountId;
+
         CharacterEntity character = new()
         {
+            AccountId = accountId,
             Name = request.Name,
             Level = 0,
             Experience = 0,
