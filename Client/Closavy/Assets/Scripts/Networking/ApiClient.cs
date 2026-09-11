@@ -19,7 +19,12 @@ public class ApiClient : MonoBehaviour
 
         if (request.result == UnityWebRequest.Result.Success)
         {
-            Debug.Log($"Server response: {request.downloadHandler.text}");
+            var json = request.downloadHandler.text;
+
+            var character = JsonUtility.FromJson<CharacterResponse>(json);
+
+            Debug.Log($"Character: {character.name}");
+            Debug.Log($"Level: {character.level}");
         }
         else
         {
