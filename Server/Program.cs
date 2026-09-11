@@ -1,6 +1,5 @@
 using Closavy.Server.Data;
 using Closavy.Server.HealthCheck;
-using Closavy.Server.Services;
 using Closavy.Server.Services.Character;
 using Closavy.Server.Validations.Character;
 using FluentValidation;

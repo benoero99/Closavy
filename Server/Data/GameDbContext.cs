@@ -11,5 +11,12 @@ public class GameDbContext : DbContext
     {
     }
 
-    public DbSet<Character> Characters => Set<Character>();
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        EntityNamingConvention.Apply(modelBuilder);
+    }
+
+    public DbSet<CharacterEntity> Characters => Set<CharacterEntity>();
 }
