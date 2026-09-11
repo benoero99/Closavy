@@ -6,5 +6,4 @@ public interface ICharacterService
 {
     public Task<CharacterResponseDto> CreateCharacterAsync(CharacterCreateDto request, CancellationToken ct);
     public Task<CharacterResponseDto> GetCharacterAsync(int characterId, CancellationToken ct);
-
 }

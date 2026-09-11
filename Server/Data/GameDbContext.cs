@@ -19,4 +19,5 @@ public class GameDbContext : DbContext
     }
 
     public DbSet<CharacterEntity> Characters => Set<CharacterEntity>();
+    public DbSet<AccountEntity> Accounts => Set<AccountEntity>();
 }
