@@ -1,11 +1,10 @@
 using Closavy.Server.Dtos.Character;
-using Closavy.Server.Models;
 
-namespace Closavy.Server.Services.Character;
+namespace Closavy.Server.Services;
 
 public interface ICharacterService
 {
-    public Task<int> CreateCharacterAsync(CharacterCreateDto request, CancellationToken ct);
+    public Task<CharacterResponseDto> CreateCharacterAsync(CharacterCreateDto request, CancellationToken ct);
     public Task<CharacterResponseDto> GetCharacterAsync(int characterId, CancellationToken ct);
 
 }

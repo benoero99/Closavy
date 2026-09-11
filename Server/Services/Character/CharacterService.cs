@@ -9,7 +9,7 @@ public class CharacterService(
     GameDbContext dbContext
 ) : ICharacterService
 {
-    public async Task<int> CreateCharacterAsync(CharacterCreateDto request, CancellationToken ct)
+    public async Task<CharacterResponseDto> CreateCharacterAsync(CharacterCreateDto request, CancellationToken ct)
     {
         if (await IsCharacterNameAlreadyInUse(request.Name))
             throw new Exception("Character name is already in use!");
@@ -24,7 +24,14 @@ public class CharacterService(
         await dbContext.AddAsync(character, ct);
         await dbContext.SaveChangesAsync(ct);
 
-        return character.Id;
+        return new CharacterResponseDto
+        {
+            Id = character.Id,
+            Name = character.Name,
+            Level = character.Level,
+            Experience = character.Experience,
+            CreatedAt = character.CreatedAt,
+        };
     }
 
     public async Task<CharacterResponseDto> GetCharacterAsync(int characterId, CancellationToken ct)

@@ -19,10 +19,10 @@ public class CharacterController(
     private readonly IValidator<CharacterCreateDto> _validator = validator;
 
     [HttpPost]
-    [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(CharacterResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> PostCharacter(CharacterCreateDto createDto, CancellationToken ct = default)
+    public async Task<ActionResult<CharacterResponseDto>> PostCharacter(CharacterCreateDto createDto, CancellationToken ct = default)
     {
         var validationResult = await _validator.ValidateAsync(createDto, ct);
 
@@ -31,16 +31,16 @@ public class CharacterController(
             return BadRequest(validationResult.ToDictionary());
         }
 
-        int createdId = await characterService.CreateCharacterAsync(createDto, ct);
+        CharacterResponseDto createdCharacter = await characterService.CreateCharacterAsync(createDto, ct);
 
-        return Created(new Uri(Request.GetEncodedUrl() + "/" + createdId), createdId);
+        return Created(new Uri(Request.GetEncodedUrl() + "/" + createdCharacter.Id), createdCharacter);
     }
 
     [HttpGet("{characterId:int}")]
     [ProducesResponseType(typeof(CharacterResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetCharacter([FromRoute] int characterId, CancellationToken ct = default)
+    public async Task<ActionResult<CharacterResponseDto>> GetCharacter([FromRoute] int characterId, CancellationToken ct = default)
     {
         CharacterResponseDto character = await characterService.GetCharacterAsync(characterId, ct);
 
