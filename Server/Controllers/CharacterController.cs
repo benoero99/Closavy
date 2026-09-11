@@ -1,5 +1,4 @@
 using Closavy.Server.Dtos.Character;
-using Closavy.Server.Models;
 using Closavy.Server.Services.Character;
 using FluentValidation;
 using Microsoft.AspNetCore.Http.Extensions;

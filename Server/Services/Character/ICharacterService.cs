@@ -1,6 +1,6 @@
 using Closavy.Server.Dtos.Character;
 
-namespace Closavy.Server.Services;
+namespace Closavy.Server.Services.Character;
 
 public interface ICharacterService
 {
