@@ -1,4 +1,5 @@
 using System.Collections;
+using Newtonsoft.Json;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -13,9 +14,9 @@ public class CharacterScreen : MonoBehaviour
 
     public void DisplayCharacter(CharacterResponse character)
     {
-        characterNameText.text = $"Name: {character.name}";
-        characterLevelText.text = $"Level: {character.level}";
-        characterExperienceText.text = $"XP: {character.experience}";
+        characterNameText.text = $"Name: {character.Name}";
+        characterLevelText.text = $"Level: {character.Level}";
+        characterExperienceText.text = $"XP: {character.Experience}";
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -38,16 +39,10 @@ public class CharacterScreen : MonoBehaviour
         var json = request.downloadHandler.text;
         Debug.Log($"Returned json: {json}");
 
-        var character = JsonUtility.FromJson<CharacterResponse>(json);
+        var character = JsonConvert.DeserializeObject<CharacterResponse>(json);
 
-        Debug.Log($"Character name: {character.name}");
+        Debug.Log($"Character name: {character.Name}");
 
         DisplayCharacter(character);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }

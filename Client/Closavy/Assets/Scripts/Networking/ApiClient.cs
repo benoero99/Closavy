@@ -23,8 +23,8 @@ public class ApiClient : MonoBehaviour
 
             var character = JsonUtility.FromJson<CharacterResponse>(json);
 
-            Debug.Log($"Character: {character.name}");
-            Debug.Log($"Level: {character.level}");
+            Debug.Log($"Character: {character.Name}");
+            Debug.Log($"Level: {character.Level}");
         }
         else
         {
