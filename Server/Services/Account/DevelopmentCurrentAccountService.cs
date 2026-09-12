@@ -2,5 +2,23 @@ namespace Closavy.Server.Services.Account;
 
 public class DevelopmentCurrentAccountService : ICurrentAccountService
 {
-    public int AccountId => 1;
+    private static int? accountId;
+
+    public int GetLoggedInUser()
+    {
+        if (accountId == null)
+            return 0;
+
+        return (int)accountId;
+    }
+
+    public void Login(int accountId)
+    {
+        DevelopmentCurrentAccountService.accountId = accountId;
+    }
+
+    public void Logout()
+    {
+        accountId = null;
+    }
 }

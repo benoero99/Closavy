@@ -1,6 +1,7 @@
 using Closavy.Server.Data;
 using Closavy.Server.HealthCheck;
 using Closavy.Server.Services.Account;
+using Closavy.Server.Services.Auth;
 using Closavy.Server.Services.Character;
 using Closavy.Server.Validations.Character;
 using FluentValidation;
@@ -23,6 +24,7 @@ builder.Services.AddDbContext<GameDbContext>(options =>
 
 builder.Services.AddScoped<ICharacterService, CharacterService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICurrentAccountService, DevelopmentCurrentAccountService>();
 builder.Services.AddValidatorsFromAssemblyContaining<CharacterCreateDtoValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<AccountCreateDtoValidator>();

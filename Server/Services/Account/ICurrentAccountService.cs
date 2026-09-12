@@ -2,5 +2,7 @@ namespace Closavy.Server.Services.Account;
 
 public interface ICurrentAccountService
 {
-    int AccountId { get; }
+    public void Login(int accountId);
+    public void Logout();
+    public int GetLoggedInUser();
 }

@@ -13,10 +13,10 @@ public class CharacterService(
 {
     public async Task<CharacterResponseDto> CreateCharacterAsync(CharacterCreateDto request, CancellationToken ct)
     {
-        if (await IsCharacterNameAlreadyInUse(request.Name))
+        if (await IsCharacterNameAlreadyInUse(request.Name, ct))
             throw new Exception("Character name is already in use!");
 
-        var accountId = currentAccountService.AccountId;
+        var accountId = currentAccountService.GetLoggedInUser();
 
         CharacterEntity character = new()
         {
@@ -54,9 +54,29 @@ public class CharacterService(
         };
     }
 
-    private async Task<bool> IsCharacterNameAlreadyInUse(string name)
+    public async Task<List<CharacterResponseDto>> GetCharactersByAccountIdAsync(int accountId, CancellationToken ct)
     {
-        CharacterEntity? character = await dbContext.Characters.SingleOrDefaultAsync(c => c.Name == name);
+        List<CharacterEntity> characters = await dbContext.Characters.Where(c => c.AccountId == accountId).ToListAsync(ct);
+        List<CharacterResponseDto> characterResponseDtos = [];
+        foreach (var character in characters)
+        {
+            characterResponseDtos.Add(new CharacterResponseDto
+            {
+                Id = character.Id,
+                Name = character.Name,
+                Level = character.Level,
+                Experience = character.Experience,
+                CreatedAt = character.CreatedAt,
+            });
+        }
+        
+        return characterResponseDtos;
+    }
+
+
+    private async Task<bool> IsCharacterNameAlreadyInUse(string name, CancellationToken ct)
+    {
+        CharacterEntity? character = await dbContext.Characters.SingleOrDefaultAsync(c => c.Name == name, ct);
         return character != null;
     }
 }

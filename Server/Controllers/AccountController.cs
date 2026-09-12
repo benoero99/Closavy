@@ -14,8 +14,6 @@ public class AccountController(
     IAccountService accountService
 ) : Controller
 {
-    private readonly ILogger<AccountController> _logger = logger;
-    private readonly IValidator<AccountCreateDto> _validator = validator;
 
 
     [HttpPost]
@@ -24,7 +22,7 @@ public class AccountController(
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<AccountResponseDto>> PostAccount(AccountCreateDto createDto, CancellationToken ct = default)
     {
-        var validationResult = await _validator.ValidateAsync(createDto, ct);
+        var validationResult = await validator.ValidateAsync(createDto, ct);
 
         if (!validationResult.IsValid)
         {
