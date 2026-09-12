@@ -7,4 +7,5 @@ public interface ICharacterService
     public Task<CharacterResponseDto> CreateCharacterAsync(CharacterCreateDto request, CancellationToken ct);
     public Task<CharacterResponseDto> GetCharacterAsync(int characterId, CancellationToken ct);
     public Task<List<CharacterResponseDto>> GetCharactersByAccountIdAsync(int accountId, CancellationToken ct);
+    public Task<List<CharacterResponseDto>> GetCharactersByLoggedInUserAsync(CancellationToken ct);
 }

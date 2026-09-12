@@ -6,7 +6,8 @@ using Microsoft.EntityFrameworkCore;
 namespace Closavy.Server.Services.Account;
 
 public class AccountService(
-    GameDbContext dbContext
+    GameDbContext dbContext,
+    ICurrentAccountService currentAccountService
 ) : IAccountService
 {
     public async Task<AccountResponseDto> CreateAccountAsync(AccountCreateDto request, CancellationToken ct)
@@ -39,6 +40,20 @@ public class AccountService(
             DisplayName = account.DisplayName,
         };
     }
+
+    public async Task<AccountResponseDto> GetLoggedInUserAsync(CancellationToken ct)
+    {
+        int loggedInUserId = currentAccountService.GetLoggedInUser();
+
+        AccountEntity? account = await dbContext.Accounts.FindAsync([loggedInUserId], cancellationToken: ct) ?? throw new Exception("Account not found");
+        
+        return new AccountResponseDto
+        {
+            Id = account.Id,
+            DisplayName = account.DisplayName,
+        };
+    }
+
 
     private async Task<bool> IsAccountDisplayNameAlreadyInUse(string name)
     {

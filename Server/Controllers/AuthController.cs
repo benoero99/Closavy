@@ -1,4 +1,5 @@
 using Closavy.Server.Dtos.Account;
+using Closavy.Server.Dtos.Auth;
 using Closavy.Server.Services.Auth;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,9 +15,9 @@ public class AuthController(
     [HttpPost("Login")]
     [ProducesResponseType(typeof(AccountResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<AccountResponseDto>> Login(string displayName, CancellationToken ct)
+    public async Task<ActionResult<AccountResponseDto>> Login([FromBody] LoginRequestDto request, CancellationToken ct)
     {
-        AccountResponseDto account = await authService.LoginAsync(displayName, ct);
+        AccountResponseDto account = await authService.LoginAsync(request.DisplayName, ct);
 
         return Ok(account);
     }

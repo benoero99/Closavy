@@ -6,4 +6,5 @@ public interface IAccountService
 {
     public Task<AccountResponseDto> CreateAccountAsync(AccountCreateDto request, CancellationToken ct);
     public Task<AccountResponseDto> GetAccountAsync(int accountId, CancellationToken ct);
+    public Task<AccountResponseDto> GetLoggedInUserAsync(CancellationToken ct);
 }

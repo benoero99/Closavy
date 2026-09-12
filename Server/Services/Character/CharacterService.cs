@@ -73,6 +73,25 @@ public class CharacterService(
         return characterResponseDtos;
     }
 
+    public async Task<List<CharacterResponseDto>> GetCharactersByLoggedInUserAsync(CancellationToken ct)
+    {
+        var currentUserId = currentAccountService.GetLoggedInUser();
+        List<CharacterEntity> characters = await dbContext.Characters.Where(c => c.AccountId == currentUserId).ToListAsync(ct);
+        List<CharacterResponseDto> characterResponseDtos = [];
+        foreach (var character in characters)
+        {
+            characterResponseDtos.Add(new CharacterResponseDto
+            {
+                Id = character.Id,
+                Name = character.Name,
+                Level = character.Level,
+                Experience = character.Experience,
+                CreatedAt = character.CreatedAt,
+            });
+        }
+        
+        return characterResponseDtos;
+    }
 
     private async Task<bool> IsCharacterNameAlreadyInUse(string name, CancellationToken ct)
     {

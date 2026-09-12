@@ -14,8 +14,6 @@ public class AccountController(
     IAccountService accountService
 ) : Controller
 {
-
-
     [HttpPost]
     [ProducesResponseType(typeof(AccountResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -38,9 +36,20 @@ public class AccountController(
     [ProducesResponseType(typeof(AccountResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<AccountResponseDto>> GetCharacter([FromRoute] int accountId, CancellationToken ct = default)
+    public async Task<ActionResult<AccountResponseDto>> GetAccount([FromRoute] int accountId, CancellationToken ct = default)
     {
         AccountResponseDto account = await accountService.GetAccountAsync(accountId, ct);
+
+        return Ok(account);
+    }
+
+    [HttpGet("LoggedInAccount")]
+    [ProducesResponseType(typeof(AccountResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<AccountResponseDto>> GetLoggedinAccount(CancellationToken ct = default)
+    {
+        AccountResponseDto account = await accountService.GetLoggedInUserAsync(ct);
 
         return Ok(account);
     }

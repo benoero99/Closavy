@@ -50,8 +50,19 @@ public class CharacterController(
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<CharacterResponseDto>> GetCharactersByAccountId([FromRoute] int accountId, CancellationToken ct = default)
     {
-        List<CharacterResponseDto> character = await characterService.GetCharactersByAccountIdAsync(accountId, ct);
+        List<CharacterResponseDto> characters = await characterService.GetCharactersByAccountIdAsync(accountId, ct);
 
-        return Ok(character);
+        return Ok(characters);
+    }
+
+    [HttpGet("Characters", Name = "GetCharactersByLoggedInUser")]
+    [ProducesResponseType(typeof(List<CharacterResponseDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<CharacterResponseDto>> GetCharactersByLoggedInUser(CancellationToken ct = default)
+    {
+        List<CharacterResponseDto> characters = await characterService.GetCharactersByLoggedInUserAsync(ct);
+
+        return Ok(characters);
     }
 }
