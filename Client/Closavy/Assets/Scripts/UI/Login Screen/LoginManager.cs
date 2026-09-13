@@ -1,46 +1,43 @@
 using System.Collections;
-using Newtonsoft.Json;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class LoginScreen : MonoBehaviour
 {
-    [SerializeField] private TMP_InputField displayNameText;
-    private const string BaseUrl = "http://localhost:5207";
+    [SerializeField] private TMP_InputField displayNameTIF;
+    [SerializeField] private TMP_Text errorMessageText;
 
     public void LoginPressed()
     {
-        StartCoroutine(Login(displayNameText.text));
+        StartCoroutine(Login(displayNameTIF.text));
+    }
+
+    public void EmptyErrorMessage(string value)
+    {
+        errorMessageText.text = string.Empty;
     }
 
     private IEnumerator Login(string displayName)
     {
-        Debug.Log("Display name: " + displayNameText.text);
+        Debug.Log("Display name: " + displayNameTIF.text);
 
         LoginRequest loginRequest = new()
         {
             DisplayName = displayName,
         };
 
-        string json = JsonConvert.SerializeObject(loginRequest);
-
-        Debug.Log("Login request json: " + json);
-
-        using var request = UnityWebRequest.Post($"{BaseUrl}/Auth/Login", json, "application/json");
-
-        yield return request.SendWebRequest();
-
-        if (request.result != UnityWebRequest.Result.Success)
+        yield return ApiClient.Post<LoginRequest, AccountRespone>("Auth/Login", loginRequest, result =>
         {
-            Debug.LogError($"Request failed: {request.error}");
-            yield break;
-        }
+            if (!result.Success)
+            {
+                errorMessageText.text = result.ProblemDetails.Title;
+                return;
+            }
 
-        Debug.Log("Login successful");
+            Debug.Log("Login successful");
 
-        SceneManager.LoadScene(1);
+            SceneManager.LoadScene(1);
+        });
     }
 }

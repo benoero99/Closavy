@@ -1,26 +1,29 @@
 using System.Collections;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Networking;
 
 public class CreateCharacterPanel : MonoBehaviour
 {
     [SerializeField] private CharacterScreenManager characterScreenManager;
     [SerializeField] private TMP_InputField newCharacterNameTIF;
-    private const string BaseUrl = "http://localhost:5207";
+    [SerializeField] private TMP_Text errorMessageText;
 
     void OnEnable()
     {
         newCharacterNameTIF.text = string.Empty;
     }
 
+    public void EmptyErrorMessage(string value)
+    {
+        errorMessageText.text = string.Empty;
+    }
+
     public void FinishCharacterCreationButtonPressed()
     {
         if (!ValidCharacterName(newCharacterNameTIF.text))
         {
-            Debug.LogError("Invalid character name!");
+            errorMessageText.text = "Invalid character name!";
             return;
         }
 
@@ -36,29 +39,22 @@ public class CreateCharacterPanel : MonoBehaviour
     {
         Debug.Log("CreateCharacter called");
 
+
         CharacterRequest characterRequest = new()
         {
             Name = characterName,
         };
 
-        string requestJson = JsonConvert.SerializeObject(characterRequest);
-
-        Debug.Log("characterRequest: " + requestJson);
-
-        using var request = UnityWebRequest.Post($"{BaseUrl}/Character", requestJson, "application/json");
-
-        yield return request.SendWebRequest();
-
-        if (request.result != UnityWebRequest.Result.Success)
+        yield return ApiClient.Post<CharacterRequest, CharacterResponse>("Character", characterRequest, result =>
         {
-            Debug.LogError($"Request failed: {request.error}");
-            yield break;
-        }
+            if (!result.Success)
+            {
+                errorMessageText.text = result.ProblemDetails.Title;
+                return;
+            }
 
-        var json = request.downloadHandler.text;
-        var characterResponse = JsonConvert.DeserializeObject<CharacterResponse>(json);
-
-        characterScreenManager.CharacterCreated(characterResponse);
+            characterScreenManager.CharacterCreated(result.Data);
+        });
     }
 
     private bool ValidCharacterName(string name)

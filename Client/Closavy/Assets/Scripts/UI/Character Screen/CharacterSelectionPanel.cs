@@ -1,10 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
 public class CharacterSelectionPanel : MonoBehaviour
@@ -17,8 +15,6 @@ public class CharacterSelectionPanel : MonoBehaviour
 
     private List<CharacterResponse> characters;
     private int currentCharacterIndex;
-
-    private const string BaseUrl = "http://localhost:5207";
 
     void Start()
     {
@@ -60,50 +56,40 @@ public class CharacterSelectionPanel : MonoBehaviour
     {
         Debug.Log("GetDisplayName called");
 
-        using var request = UnityWebRequest.Get($"{BaseUrl}/Account/LoggedInAccount");
-
-        yield return request.SendWebRequest();
-
-        if (request.result != UnityWebRequest.Result.Success)
+        yield return ApiClient.Get<AccountRespone>("Account/LoggedInAccount", result =>
         {
-            Debug.LogError($"Request failed: {request.error}");
-            yield break;
-        }
+            if (!result.Success)
+            {
+                Debug.LogError($"Request failed: {result.ProblemDetails.Detail}");
+                return;
+            }
 
-        var json = request.downloadHandler.text;
-        Debug.Log("Current logged in account: " + json);
+            displayNameText.text = result.Data.DisplayName;
 
-        var accountRespone = JsonConvert.DeserializeObject<AccountRespone>(json);
-        displayNameText.text = accountRespone.DisplayName;
-
-        StartCoroutine(GetCharacters());
+            StartCoroutine(GetCharacters());
+        });
     }
 
     private IEnumerator GetCharacters()
     {
         Debug.Log("GetCharacters called");
 
-        using var request = UnityWebRequest.Get($"{BaseUrl}/Character/Characters");
-
-        yield return request.SendWebRequest();
-
-        if (request.result != UnityWebRequest.Result.Success)
+        yield return ApiClient.Get<List<CharacterResponse>>("Character/Characters", result =>
         {
-            Debug.LogError($"Request failed: {request.error}");
-            yield break;
-        }
+            if (!result.Success)
+            {
+                Debug.LogError($"Request failed: {result.ProblemDetails.Detail}");
+                return;
+            }
 
-        var json = request.downloadHandler.text;
-        Debug.Log("Current users characters: " + json);
+            characters = result.Data;
 
-        List<CharacterResponse> charactersResponse = JsonConvert.DeserializeObject<List<CharacterResponse>>(json);
-        characters = charactersResponse;
-
-        if (characters.Count != 0)
-        {
-            currentCharacterIndex = 0;
-            UpdateCharacterDisplay();
-        }
+            if (characters.Count != 0)
+            {
+                currentCharacterIndex = 0;
+                UpdateCharacterDisplay();
+            }
+        });
     }
 
     private void SelectPreviousCharacter()
@@ -147,18 +133,17 @@ public class CharacterSelectionPanel : MonoBehaviour
     {
         Debug.Log("Logout pressed");
 
-        using var request = UnityWebRequest.PostWwwForm($"{BaseUrl}/Auth/Logout", "");
-
-        yield return request.SendWebRequest();
-
-        if (request.result != UnityWebRequest.Result.Success)
+        yield return ApiClient.Post<string, string>("Auth/Logout", "", result =>
         {
-            Debug.LogError($"Request failed: {request.error}");
-            yield break;
-        }
+            if (!result.Success)
+            {
+                Debug.LogError($"Request failed: {result.ProblemDetails.Detail}");
+                return;
+            }
 
-        Debug.Log("Logout successful");
+            Debug.Log("Logout successful");
 
-        SceneManager.LoadScene(0);
+            SceneManager.LoadScene(0);
+        });
     }
 }
