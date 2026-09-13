@@ -202,7 +202,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1939122618}
+      - m_Target: {fileID: 1334775896}
         m_TargetAssemblyTypeName: CreateCharacterPanel, Assembly-CSharp
         m_MethodName: CancelCharacterCreationButtonPressed
         m_Mode: 1
@@ -785,7 +785,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1939122618}
+      - m_Target: {fileID: 1334775896}
         m_TargetAssemblyTypeName: CreateCharacterPanel, Assembly-CSharp
         m_MethodName: FinishCharacterCreationButtonPressed
         m_Mode: 1
@@ -1739,7 +1739,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1522618139}
+      - m_Target: {fileID: 1062724700}
         m_TargetAssemblyTypeName: CharacterSelectionPanel, Assembly-CSharp
         m_MethodName: AddCharacterButtonPressed
         m_Mode: 1
@@ -1934,6 +1934,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1062724699}
+  - component: {fileID: 1062724700}
   m_Layer: 5
   m_Name: CharacterSelectionPanel
   m_TagString: Untagged
@@ -1964,6 +1965,23 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1062724700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1062724698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5aeaa772af879f74d8347cdf4dddf70b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterScreenManager: {fileID: 1996670932}
+  displayNameText: {fileID: 929852345}
+  characterNameText: {fileID: 2068737297}
+  characterLevelText: {fileID: 418796024}
+  characterExperienceText: {fileID: 2058185329}
 --- !u!1 &1334775894
 GameObject:
   m_ObjectHideFlags: 0
@@ -1973,6 +1991,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1334775895}
+  - component: {fileID: 1334775896}
   m_Layer: 5
   m_Name: AddCharacterPanel
   m_TagString: Untagged
@@ -2004,6 +2023,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1334775896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1334775894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1923588fbdac6c42986363866043aff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterScreenManager: {fileID: 1996670932}
+  newCharacterNameTIF: {fileID: 430362128}
 --- !u!1 &1336755890
 GameObject:
   m_ObjectHideFlags: 0
@@ -2056,55 +2089,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding: {x: -8, y: -5, z: -8, w: -5}
   m_Softness: {x: 0, y: 0}
---- !u!1 &1522618138
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1522618140}
-  - component: {fileID: 1522618139}
-  m_Layer: 0
-  m_Name: CharacterSelectionPanel
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1522618139
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1522618138}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5aeaa772af879f74d8347cdf4dddf70b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterScreenManager: {fileID: 1996670932}
-  displayNameText: {fileID: 929852345}
-  characterNameText: {fileID: 2068737297}
-  characterLevelText: {fileID: 418796024}
-  characterExperienceText: {fileID: 2058185329}
---- !u!4 &1522618140
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1522618138}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1586992593
 GameObject:
   m_ObjectHideFlags: 0
@@ -2188,7 +2172,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1522618139}
+      - m_Target: {fileID: 1062724700}
         m_TargetAssemblyTypeName: CharacterSelectionPanel, Assembly-CSharp
         m_MethodName: LogoutButtonPressed
         m_Mode: 1
@@ -2587,52 +2571,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1936099867}
   m_CullTransparentMesh: 1
---- !u!1 &1939122617
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1939122619}
-  - component: {fileID: 1939122618}
-  m_Layer: 0
-  m_Name: CreateCharacterPanel
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1939122618
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1939122617}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1923588fbdac6c42986363866043aff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterScreenManager: {fileID: 1996670932}
-  newCharacterNameTIF: {fileID: 430362128}
---- !u!4 &1939122619
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1939122617}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1939701202
 GameObject:
   m_ObjectHideFlags: 0
@@ -2741,10 +2679,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af9776b99f5c7a04781e6fbcd6af933f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterSelectionPanelGO: {fileID: 1062724698}
-  createCharacterPanelGO: {fileID: 1334775894}
-  characterSelectionPanel: {fileID: 1522618139}
-  createCharacterPanel: {fileID: 1939122618}
+  characterSelectionPanel: {fileID: 1062724700}
+  createCharacterPanel: {fileID: 1334775896}
 --- !u!4 &1996670933
 Transform:
   m_ObjectHideFlags: 0
@@ -3198,5 +3134,3 @@ SceneRoots:
   - {fileID: 1939701205}
   - {fileID: 575122003}
   - {fileID: 1996670933}
-  - {fileID: 1522618140}
-  - {fileID: 1939122619}

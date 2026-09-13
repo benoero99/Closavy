@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class CharacterScreenManager : MonoBehaviour
 {
-    [SerializeField] private GameObject characterSelectionPanelGO;
-    [SerializeField] private GameObject createCharacterPanelGO;
     [SerializeField] private CharacterSelectionPanel characterSelectionPanel;
     [SerializeField] private CreateCharacterPanel createCharacterPanel;
 
@@ -15,14 +13,14 @@ public class CharacterScreenManager : MonoBehaviour
 
     public void SetCharacterSelectionPanelActive()
     {
-        characterSelectionPanelGO.SetActive(true);
-        createCharacterPanelGO.SetActive(false);
+        characterSelectionPanel.gameObject.SetActive(true);
+        createCharacterPanel.gameObject.SetActive(false);
     }
 
     public void SetAddCharacterPanelActive()
     {
-        characterSelectionPanelGO.SetActive(false);
-        createCharacterPanelGO.SetActive(true);
+        characterSelectionPanel.gameObject.SetActive(false);
+        createCharacterPanel.gameObject.SetActive(true);
     }
 
     public void CharacterCreated(CharacterResponse character)

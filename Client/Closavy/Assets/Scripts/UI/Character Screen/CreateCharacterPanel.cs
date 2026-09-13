@@ -11,6 +11,11 @@ public class CreateCharacterPanel : MonoBehaviour
     [SerializeField] private TMP_InputField newCharacterNameTIF;
     private const string BaseUrl = "http://localhost:5207";
 
+    void OnEnable()
+    {
+        newCharacterNameTIF.text = string.Empty;
+    }
+
     public void FinishCharacterCreationButtonPressed()
     {
         if (!ValidCharacterName(newCharacterNameTIF.text))
@@ -52,7 +57,7 @@ public class CreateCharacterPanel : MonoBehaviour
 
         var json = request.downloadHandler.text;
         var characterResponse = JsonConvert.DeserializeObject<CharacterResponse>(json);
-        
+
         characterScreenManager.CharacterCreated(characterResponse);
     }
 
