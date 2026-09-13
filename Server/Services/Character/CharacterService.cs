@@ -1,7 +1,7 @@
 using Closavy.Server.Data;
 using Closavy.Server.Dtos.Character;
 using Closavy.Server.Exceptions;
-using Closavy.Server.Models;
+using Closavy.Server.Models.Character;
 using Closavy.Server.Services.Account;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,10 +19,18 @@ public class CharacterService(
 
         var accountId = currentAccountService.GetLoggedInUser();
 
+        if (accountId == 0)
+        {
+            throw new Exception("No logged in user");
+        }
+
         CharacterEntity character = new()
         {
             AccountId = accountId,
             Name = request.Name,
+            Class = request.Class,
+            Deity = request.Deity,
+            Race = request.Race,
             Level = 0,
             Experience = 0,
             CreatedAt = DateTime.UtcNow,
@@ -31,28 +39,14 @@ public class CharacterService(
         await dbContext.AddAsync(character, ct);
         await dbContext.SaveChangesAsync(ct);
 
-        return new CharacterResponseDto
-        {
-            Id = character.Id,
-            Name = character.Name,
-            Level = character.Level,
-            Experience = character.Experience,
-            CreatedAt = character.CreatedAt,
-        };
+        return CreateCharacterResponseDto(character);
     }
 
     public async Task<CharacterResponseDto> GetCharacterAsync(int characterId, CancellationToken ct)
     {
         CharacterEntity? character = await dbContext.Characters.FindAsync([characterId], cancellationToken: ct) ?? throw new EntityNotFoundException($"Character with id {characterId} not found");
 
-        return new CharacterResponseDto
-        {
-            Id = character.Id,
-            Name = character.Name,
-            Level = character.Level,
-            Experience = character.Experience,
-            CreatedAt = character.CreatedAt,
-        };
+        return CreateCharacterResponseDto(character);
     }
 
     public async Task<List<CharacterResponseDto>> GetCharactersByAccountIdAsync(int accountId, CancellationToken ct)
@@ -61,14 +55,7 @@ public class CharacterService(
         List<CharacterResponseDto> characterResponseDtos = [];
         foreach (var character in characters)
         {
-            characterResponseDtos.Add(new CharacterResponseDto
-            {
-                Id = character.Id,
-                Name = character.Name,
-                Level = character.Level,
-                Experience = character.Experience,
-                CreatedAt = character.CreatedAt,
-            });
+            characterResponseDtos.Add(CreateCharacterResponseDto(character));
         }
 
         return characterResponseDtos;
@@ -81,14 +68,7 @@ public class CharacterService(
         List<CharacterResponseDto> characterResponseDtos = [];
         foreach (var character in characters)
         {
-            characterResponseDtos.Add(new CharacterResponseDto
-            {
-                Id = character.Id,
-                Name = character.Name,
-                Level = character.Level,
-                Experience = character.Experience,
-                CreatedAt = character.CreatedAt,
-            });
+            characterResponseDtos.Add(CreateCharacterResponseDto(character));
         }
 
         return characterResponseDtos;
@@ -98,5 +78,20 @@ public class CharacterService(
     {
         CharacterEntity? character = await dbContext.Characters.SingleOrDefaultAsync(c => c.Name == name, ct);
         return character != null;
+    }
+
+    private static CharacterResponseDto CreateCharacterResponseDto(CharacterEntity entity)
+    {
+        return new CharacterResponseDto
+        {
+            Id = entity.Id,
+            Name = entity.Name,
+            Class = entity.Class,
+            Deity = entity.Deity,
+            Race = entity.Race,
+            Level = entity.Level,
+            Experience = entity.Experience,
+            CreatedAt = entity.CreatedAt,
+        };
     }
 }

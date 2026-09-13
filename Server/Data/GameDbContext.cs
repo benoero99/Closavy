@@ -1,5 +1,6 @@
 
 using Closavy.Server.Models;
+using Closavy.Server.Models.Character;
 using Microsoft.EntityFrameworkCore;
 
 namespace Closavy.Server.Data;

@@ -1,3 +1,5 @@
+using Closavy.Server.Models.Character;
+
 namespace Closavy.Server.Models;
 
 public class AccountEntity
