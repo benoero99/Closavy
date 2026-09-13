@@ -1,4 +1,5 @@
 using Closavy.Server.Data;
+using Closavy.Server.Exceptions;
 using Closavy.Server.HealthCheck;
 using Closavy.Server.Services.Account;
 using Closavy.Server.Services.Auth;
@@ -10,6 +11,19 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddProblemDetails(
+    configure =>
+{
+    configure.CustomizeProblemDetails = context =>
+    {
+        context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier);
+        context.ProblemDetails.Extensions.TryAdd("title", context.ProblemDetails.Title);
+        context.ProblemDetails.Extensions.TryAdd("detail", context.ProblemDetails.Detail);
+        context.ProblemDetails.Extensions.TryAdd("type", context.ProblemDetails.Type);
+    };
+}
+);
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
@@ -40,6 +54,9 @@ if (app.Environment.IsDevelopment())
         options.SwaggerEndpoint("/openapi/v1.json", "Closavy.Server v1");
     });
 }
+
+//Add exception handler in the middleware
+app.UseExceptionHandler();
 
 app.MapHealthChecks("/health");
 

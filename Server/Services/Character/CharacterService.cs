@@ -1,5 +1,6 @@
 using Closavy.Server.Data;
 using Closavy.Server.Dtos.Character;
+using Closavy.Server.Exceptions;
 using Closavy.Server.Models;
 using Closavy.Server.Services.Account;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +15,7 @@ public class CharacterService(
     public async Task<CharacterResponseDto> CreateCharacterAsync(CharacterCreateDto request, CancellationToken ct)
     {
         if (await IsCharacterNameAlreadyInUse(request.Name, ct))
-            throw new Exception("Character name is already in use!");
+            throw new NameAlreadyTakenException($"Character name '{request.Name}' is already in use!");
 
         var accountId = currentAccountService.GetLoggedInUser();
 
@@ -42,8 +43,8 @@ public class CharacterService(
 
     public async Task<CharacterResponseDto> GetCharacterAsync(int characterId, CancellationToken ct)
     {
-        CharacterEntity? character = await dbContext.Characters.FindAsync([characterId], cancellationToken: ct) ?? throw new Exception("Character not found");
-        
+        CharacterEntity? character = await dbContext.Characters.FindAsync([characterId], cancellationToken: ct) ?? throw new EntityNotFoundException($"Character with id {characterId} not found");
+
         return new CharacterResponseDto
         {
             Id = character.Id,
@@ -69,7 +70,7 @@ public class CharacterService(
                 CreatedAt = character.CreatedAt,
             });
         }
-        
+
         return characterResponseDtos;
     }
 
@@ -89,7 +90,7 @@ public class CharacterService(
                 CreatedAt = character.CreatedAt,
             });
         }
-        
+
         return characterResponseDtos;
     }
 

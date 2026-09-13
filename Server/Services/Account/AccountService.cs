@@ -1,5 +1,6 @@
 using Closavy.Server.Data;
 using Closavy.Server.Dtos.Account;
+using Closavy.Server.Exceptions;
 using Closavy.Server.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,7 +14,7 @@ public class AccountService(
     public async Task<AccountResponseDto> CreateAccountAsync(AccountCreateDto request, CancellationToken ct)
     {
         if (await IsAccountDisplayNameAlreadyInUse(request.DisplayName))
-            throw new Exception("Account display name is already in use!");
+            throw new NameAlreadyTakenException($"Account display name {request.DisplayName} is already in use!");
 
         AccountEntity account = new()
         {
@@ -32,8 +33,8 @@ public class AccountService(
 
     public async Task<AccountResponseDto> GetAccountAsync(int accountId, CancellationToken ct)
     {
-        AccountEntity? account = await dbContext.Accounts.FindAsync([accountId], cancellationToken: ct) ?? throw new Exception("Account not found");
-        
+        AccountEntity? account = await dbContext.Accounts.FindAsync([accountId], cancellationToken: ct) ?? throw new EntityNotFoundException($"Account with id {accountId} not found!");
+
         return new AccountResponseDto
         {
             Id = account.Id,
@@ -45,8 +46,8 @@ public class AccountService(
     {
         int loggedInUserId = currentAccountService.GetLoggedInUser();
 
-        AccountEntity? account = await dbContext.Accounts.FindAsync([loggedInUserId], cancellationToken: ct) ?? throw new Exception("Account not found");
-        
+        AccountEntity? account = await dbContext.Accounts.FindAsync([loggedInUserId], cancellationToken: ct) ?? throw new EntityNotFoundException("Logged in user not found");
+
         return new AccountResponseDto
         {
             Id = account.Id,

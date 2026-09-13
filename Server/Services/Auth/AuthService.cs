@@ -1,5 +1,6 @@
 using Closavy.Server.Data;
 using Closavy.Server.Dtos.Account;
+using Closavy.Server.Exceptions;
 using Closavy.Server.Models;
 using Closavy.Server.Services.Account;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,7 @@ public class AuthService(
 {
     public async Task<AccountResponseDto> LoginAsync(string displayName, CancellationToken ct)
     {
-        AccountEntity accountEntity = await dbContext.Accounts.SingleOrDefaultAsync(a => a.DisplayName.ToLower() == displayName.ToLower(), ct) ?? throw new Exception("Account not found");
+        AccountEntity accountEntity = await dbContext.Accounts.SingleOrDefaultAsync(a => a.DisplayName.ToLower() == displayName.ToLower(), ct) ?? throw new EntityNotFoundException($"Account with displayName {displayName} not found");
         currentAccountService.Login(accountEntity.Id);
 
         return new AccountResponseDto
