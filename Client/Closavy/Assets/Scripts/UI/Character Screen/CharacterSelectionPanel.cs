@@ -52,6 +52,12 @@ public class CharacterSelectionPanel : MonoBehaviour
         UpdateCharacterDisplay();
     }
 
+    public void ChooseCharacterButtonPressed()
+    {
+        // World
+        SceneManager.LoadScene(2);
+    }
+
     private IEnumerator GetDisplayName()
     {
         Debug.Log("GetDisplayName called");
@@ -143,6 +149,7 @@ public class CharacterSelectionPanel : MonoBehaviour
 
             Debug.Log("Logout successful");
 
+            // Login
             SceneManager.LoadScene(0);
         });
     }

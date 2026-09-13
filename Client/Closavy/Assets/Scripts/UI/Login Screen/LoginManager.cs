@@ -37,6 +37,7 @@ public class LoginScreen : MonoBehaviour
 
             Debug.Log("Login successful");
 
+            // Character selection
             SceneManager.LoadScene(1);
         });
     }
